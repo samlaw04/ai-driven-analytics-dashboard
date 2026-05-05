@@ -7,6 +7,7 @@ import org.springframework.web.bind.MissingRequestHeaderException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
+import java.time.format.DateTimeParseException
 
 data class ErrorResponse(val status: Int, val error: String, val message: String)
 
@@ -61,6 +62,16 @@ class GlobalExceptionHandler {
             status = HttpStatus.BAD_REQUEST.value(),
             error = "Bad Request",
             message = message
+        )
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body)
+    }
+
+    @ExceptionHandler(DateTimeParseException::class)
+    fun handleDateTimeParse(ex: DateTimeParseException): ResponseEntity<ErrorResponse> {
+        val body = ErrorResponse(
+            status = HttpStatus.BAD_REQUEST.value(),
+            error = "Bad Request",
+            message = "Invalid date format. Expected ISO-8601 with offset, e.g. '2026-03-01T00:00:00Z'"
         )
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body)
     }
