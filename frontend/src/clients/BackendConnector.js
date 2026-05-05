@@ -82,6 +82,19 @@ export const getDemandResponseRewards = async (customerId, startDate, endDate) =
     return response.json();
 };
 
+export const getProgramDetails = async (utilityId) => {
+    const response = await fetch(`${BASE_URL}/utility/program-details`, {
+        method: 'GET',
+        headers: {
+            'Utility-Id': utilityId,
+        },
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to fetch program details with status: ${response.status}`);
+    }
+    return response.json();
+};
+
 export const getUserProfile = async (customerId) => {
     const response = await fetch(`${BASE_URL}/user/profile`, {
         method: 'GET',

@@ -4,6 +4,7 @@ import Header from '../../components/Header/Header.jsx';
 import DPAccountSummary from '../../components/DPAccountSummary/DPAccountSummary.jsx';
 import DRAccountSummary from '../../components/DRAccountSummary/DRAccountSummary.jsx';
 import RewardsSummary from '../../components/RewardsSummary/RewardsSummary.jsx';
+import ProgramDetails from '../../components/ProgramDetails/ProgramDetails.jsx';
 
 const programTitles = {
     DP: 'Dynamic Pricing Dashboard',
@@ -36,6 +37,7 @@ const DashboardPage = () => {
                         {programType === 'DP' && <DPAccountSummary />}
                         {programType === 'DR' && <DRAccountSummary />}
                         <RewardsSummary />
+                        <ProgramDetails />
                     </div>
                 </main>
             </div>
