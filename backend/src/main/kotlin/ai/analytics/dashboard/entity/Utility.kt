@@ -18,10 +18,16 @@ data class Utility(
     @Column(name = "program_type", nullable = false)
     val programType: ProgramType = ProgramType.DP,
 
+    @Convert(converter = ProgramDetailsConverter::class)
+    @Column(name = "program_details", columnDefinition = "jsonb")
+    val programDetails: ProgramDetails? = null,
+
     @Column(name = "sign_up_incentive")
     val signUpIncentive: Double? = null,
 
     @Column(name = "ongoing_incentive")
     val ongoingIncentive: Double? = null
 )
+
+
 
