@@ -16,6 +16,38 @@ export const authenticateUser = async (email, password) => {
     return response.json();
 };
 
+export const getDynamicPricingAccountSummary = async (customerId, startDate, endDate) => {
+    const response = await fetch(`${BASE_URL}/dynamic-pricing/account-summary`, {
+        method: 'GET',
+        headers: {
+            'Customer-Id': customerId,
+            'Start-Date': startDate,
+            'End-Date': endDate,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch DP account summary with status: ${response.status}`);
+    }
+
+    return response.json();
+};
+
+export const getDemandResponseAccountSummary = async (customerId, startDate, endDate) => {
+    const response = await fetch(`${BASE_URL}/demand-response/account-summary`, {
+        method: 'GET',
+        headers: {
+            'Customer-Id': customerId,
+            'Start-Date': startDate,
+            'End-Date': endDate,
+        },
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to fetch DR account summary with status: ${response.status}`);
+    }
+    return response.json();
+};
+
 export const getUserProfile = async (customerId) => {
     const response = await fetch(`${BASE_URL}/user/profile`, {
         method: 'GET',
