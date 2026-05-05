@@ -52,5 +52,44 @@ interface ScheduleRepository : JpaRepository<Schedule, Long> {
     fun findCurrentScheduleByCustomerId(
         @Param("customerId") customerId: Long
     ): Optional<CurrentScheduleProjection>
+
+    @Query(
+        value = """
+            SELECT AVG(ct.total)
+            FROM (
+                SELECT c.customer_id, SUM(s.kwh_shifted) AS total
+                FROM dashboard.customer c
+                JOIN dashboard.customer_vehicle cv ON c.customer_id = cv.customer_id
+                JOIN dashboard.plug_session ps ON cv.customer_vehicle_id = ps.customer_vehicle_id
+                JOIN dashboard.schedule s ON ps.plug_session_id = s.plug_session_id
+                WHERE c.utility_id = :utilityId
+                GROUP BY c.customer_id
+            ) ct
+        """,
+        nativeQuery = true
+    )
+    fun findAverageKwhShiftedPerCustomerByUtility(
+        @Param("utilityId") utilityId: Long
+    ): Double?
+
+    @Query(
+        value = """
+            SELECT AVG(ct.cnt)
+            FROM (
+                SELECT c.customer_id, COUNT(s.schedule_id) AS cnt
+                FROM dashboard.customer c
+                JOIN dashboard.customer_vehicle cv ON c.customer_id = cv.customer_id
+                JOIN dashboard.plug_session ps ON cv.customer_vehicle_id = ps.customer_vehicle_id
+                JOIN dashboard.schedule s ON ps.plug_session_id = s.plug_session_id
+                WHERE c.utility_id = :utilityId
+                  AND s.schedule_overridden = false
+                GROUP BY c.customer_id
+            ) ct
+        """,
+        nativeQuery = true
+    )
+    fun findAverageSchedulesFollowedPerCustomerByUtility(
+        @Param("utilityId") utilityId: Long
+    ): Double?
 }
 

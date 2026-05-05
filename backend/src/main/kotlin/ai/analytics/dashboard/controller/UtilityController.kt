@@ -1,5 +1,6 @@
 package ai.analytics.dashboard.controller
 
+import ai.analytics.dashboard.dto.UtilityAverageStatisticsResponse
 import ai.analytics.dashboard.dto.UtilityProgramDetailsResponse
 import ai.analytics.dashboard.service.UtilityService
 import org.springframework.http.ResponseEntity
@@ -19,5 +20,15 @@ class UtilityController(private val utilityService: UtilityService) {
         val response = utilityService.getProgramDetails(utilityId)
         return ResponseEntity.ok(response)
     }
+
+    @GetMapping("/average-statistics")
+    fun getAverageStatistics(
+        @RequestHeader("Utility-Id") utilityId: Long
+    ): ResponseEntity<UtilityAverageStatisticsResponse> {
+        val response = utilityService.getAverageStatistics(utilityId)
+        return ResponseEntity.ok(response)
+    }
 }
+
+
 

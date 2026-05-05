@@ -112,5 +112,44 @@ interface CustomerDrEventRepository : JpaRepository<CustomerDrEvent, Long> {
     fun findUpcomingDrEventByCustomerId(
         @Param("customerId") customerId: Long
     ): Optional<UpcomingDrEventProjection>
+
+    @Query(
+        value = """
+            SELECT AVG(ct.total)
+            FROM (
+                SELECT c.customer_id, SUM(cde.kwh_shifted) AS total
+                FROM dashboard.customer c
+                JOIN dashboard.customer_vehicle cv ON c.customer_id = cv.customer_id
+                JOIN dashboard.plug_session ps ON cv.customer_vehicle_id = ps.customer_vehicle_id
+                JOIN dashboard.customer_dr_event cde ON ps.plug_session_id = cde.plug_session_id
+                WHERE c.utility_id = :utilityId
+                GROUP BY c.customer_id
+            ) ct
+        """,
+        nativeQuery = true
+    )
+    fun findAverageKwhShiftedPerCustomerByUtility(
+        @Param("utilityId") utilityId: Long
+    ): Double?
+
+    @Query(
+        value = """
+            SELECT AVG(ct.cnt)
+            FROM (
+                SELECT c.customer_id, COUNT(cde.customer_dr_event_id) AS cnt
+                FROM dashboard.customer c
+                JOIN dashboard.customer_vehicle cv ON c.customer_id = cv.customer_id
+                JOIN dashboard.plug_session ps ON cv.customer_vehicle_id = ps.customer_vehicle_id
+                JOIN dashboard.customer_dr_event cde ON ps.plug_session_id = cde.plug_session_id
+                WHERE c.utility_id = :utilityId
+                  AND cde.dr_event_overridden = false
+                GROUP BY c.customer_id
+            ) ct
+        """,
+        nativeQuery = true
+    )
+    fun findAverageDrEventsCompletedPerCustomerByUtility(
+        @Param("utilityId") utilityId: Long
+    ): Double?
 }
 
