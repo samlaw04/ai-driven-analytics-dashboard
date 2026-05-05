@@ -48,6 +48,40 @@ export const getDemandResponseAccountSummary = async (customerId, startDate, end
     return response.json();
 };
 
+export const getDynamicPricingRewards = async (customerId, startDate, endDate) => {
+    const response = await fetch(`${BASE_URL}/dynamic-pricing/rewards`, {
+        method: 'GET',
+        headers: {
+            'Customer-Id': customerId,
+            'Start-Date': startDate,
+            'End-Date': endDate,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch DP rewards with status: ${response.status}`);
+    }
+
+    return response.json();
+};
+
+export const getDemandResponseRewards = async (customerId, startDate, endDate) => {
+    const response = await fetch(`${BASE_URL}/demand-response/rewards`, {
+        method: 'GET',
+        headers: {
+            'Customer-Id': customerId,
+            'Start-Date': startDate,
+            'End-Date': endDate,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch DR rewards with status: ${response.status}`);
+    }
+
+    return response.json();
+};
+
 export const getUserProfile = async (customerId) => {
     const response = await fetch(`${BASE_URL}/user/profile`, {
         method: 'GET',

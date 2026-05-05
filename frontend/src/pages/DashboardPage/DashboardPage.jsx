@@ -3,6 +3,7 @@ import './DashboardPage.scss';
 import Header from '../../components/Header/Header.jsx';
 import DPAccountSummary from '../../components/DPAccountSummary/DPAccountSummary.jsx';
 import DRAccountSummary from '../../components/DRAccountSummary/DRAccountSummary.jsx';
+import RewardsSummary from '../../components/RewardsSummary/RewardsSummary.jsx';
 
 const programTitles = {
     DP: 'Dynamic Pricing Dashboard',
@@ -34,6 +35,7 @@ const DashboardPage = () => {
                     <div className="dashboard-main__content">
                         {programType === 'DP' && <DPAccountSummary />}
                         {programType === 'DR' && <DRAccountSummary />}
+                        <RewardsSummary />
                     </div>
                 </main>
             </div>
