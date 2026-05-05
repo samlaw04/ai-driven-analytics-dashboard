@@ -1,16 +1,22 @@
 package ai.analytics.dashboard.service
 
 import ai.analytics.dashboard.dto.DemandResponseAccountSummaryResponse
+import ai.analytics.dashboard.dto.DemandResponseRewardsBreakdown
+import ai.analytics.dashboard.dto.DemandResponseRewardsResponse
+import ai.analytics.dashboard.dto.DrOngoingIncentiveEntry
 import ai.analytics.dashboard.exception.CustomerNotFoundException
+import ai.analytics.dashboard.exception.UtilityNotFoundException
 import ai.analytics.dashboard.repository.CustomerDrEventRepository
 import ai.analytics.dashboard.repository.CustomerRepository
+import ai.analytics.dashboard.repository.UtilityRepository
 import org.springframework.stereotype.Service
 import java.time.OffsetDateTime
 
 @Service
 class DemandResponseService(
     private val customerRepository: CustomerRepository,
-    private val customerDrEventRepository: CustomerDrEventRepository
+    private val customerDrEventRepository: CustomerDrEventRepository,
+    private val utilityRepository: UtilityRepository
 ) {
     fun getAccountSummary(
         customerId: Long,
@@ -38,6 +44,47 @@ class DemandResponseService(
             drEventsOverridden = drEventsOverridden,
             kwhShifted = kwhShifted,
             totalTimePluggedIn = totalTimePluggedIn
+        )
+    }
+
+    fun getRewards(
+        customerId: Long,
+        startDate: OffsetDateTime,
+        endDate: OffsetDateTime
+    ): DemandResponseRewardsResponse {
+
+        val customer = customerRepository.findById(customerId)
+            .orElseThrow { CustomerNotFoundException(customerId) }
+
+        val utilityId = customer.utilityId
+            ?: throw UtilityNotFoundException(customerId)
+
+        val utility = utilityRepository.findById(utilityId)
+            .orElseThrow { UtilityNotFoundException(customerId) }
+
+        val signUpIncentive = utility.signUpIncentive?.toInt() ?: 0
+        val incentivePerDrEvent = utility.ongoingIncentive ?: 0.0
+
+        val drEvents = customerDrEventRepository.findByCustomerIdAndDateRangeWithDate(customerId, startDate, endDate)
+
+        val ongoingIncentiveEntries = drEvents.map { event ->
+            val sessionRewardsEarned = if (!event.drEventOverridden) incentivePerDrEvent else 0.0
+            DrOngoingIncentiveEntry(
+                incentivePerDrEvent = incentivePerDrEvent,
+                sessionRewardsEarned = sessionRewardsEarned,
+                dateOfDr = event.drEventDate
+            )
+        }
+
+        val totalOngoingRewards = ongoingIncentiveEntries.sumOf { it.sessionRewardsEarned }
+        val totalRewards = signUpIncentive + totalOngoingRewards
+
+        return DemandResponseRewardsResponse(
+            totalRewards = totalRewards,
+            rewardsBreakdown = DemandResponseRewardsBreakdown(
+                signUpIncentive = signUpIncentive,
+                ongoingIncentive = ongoingIncentiveEntries
+            )
         )
     }
 }
