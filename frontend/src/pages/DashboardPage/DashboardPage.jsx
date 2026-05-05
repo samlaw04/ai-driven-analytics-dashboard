@@ -1,6 +1,6 @@
 import React from 'react';
 import './DashboardPage.scss';
-import { FaUser } from 'react-icons/fa';
+import Header from '../../components/Header/Header.jsx';
 
 const programTitles = {
     DP: 'Dynamic Pricing Dashboard',
@@ -13,12 +13,7 @@ const DashboardPage = () => {
 
     return (
         <div className="dashboard-layout">
-            <header className="dashboard-header">
-                <span className="dashboard-header__brand">Ford Energy Rewards</span>
-                <div className="dashboard-header__avatar">
-                    <FaUser />
-                </div>
-            </header>
+            <Header />
 
             <div className="dashboard-body">
                 <aside className="dashboard-sidebar">

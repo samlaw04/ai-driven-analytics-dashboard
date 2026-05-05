@@ -14,39 +14,6 @@ $header-height: 70px;
   background-color: $page-background;
 }
 
-.dashboard-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: $header-height;
-  background-color: $white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 32px;
-  z-index: 100;
-
-  &__brand {
-    color: $primary-blue;
-    font-weight: 700;
-    font-size: 1.1rem;
-    letter-spacing: 0.01em;
-  }
-
-  &__avatar {
-    width: 36px;
-    height: 36px;
-    background-color: $page-background;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: $text-muted;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-}
 
 .dashboard-body {
   display: flex;
