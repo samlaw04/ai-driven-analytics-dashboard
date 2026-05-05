@@ -96,6 +96,16 @@ class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body)
     }
 
+    @ExceptionHandler(NoDrEventException::class)
+    fun handleNoDrEvent(ex: NoDrEventException): ResponseEntity<ErrorResponse> {
+        val body = ErrorResponse(
+            status = HttpStatus.NOT_FOUND.value(),
+            error = "Not Found",
+            message = ex.message ?: "No upcoming demand response event found"
+        )
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body)
+    }
+
     @ExceptionHandler(Exception::class)
     fun handleGeneral(ex: Exception): ResponseEntity<ErrorResponse> {
         val body = ErrorResponse(

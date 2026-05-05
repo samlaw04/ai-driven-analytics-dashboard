@@ -2,6 +2,7 @@ package ai.analytics.dashboard.controller
 
 import ai.analytics.dashboard.dto.DemandResponseAccountSummaryResponse
 import ai.analytics.dashboard.dto.DemandResponseRewardsResponse
+import ai.analytics.dashboard.dto.UpcomingDrEventResponse
 import ai.analytics.dashboard.service.DemandResponseService
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
@@ -33,6 +34,14 @@ class DemandResponseController(private val demandResponseService: DemandResponse
     ): ResponseEntity<DemandResponseRewardsResponse> {
         val rewards = demandResponseService.getRewards(customerId, startDate, endDate)
         return ResponseEntity.ok(rewards)
+    }
+
+    @GetMapping("/upcoming-event")
+    fun getUpcomingDrEvent(
+        @RequestHeader("Customer-Id") customerId: Long
+    ): ResponseEntity<UpcomingDrEventResponse> {
+        val response = demandResponseService.getUpcomingDrEvent(customerId)
+        return ResponseEntity.ok(response)
     }
 }
 

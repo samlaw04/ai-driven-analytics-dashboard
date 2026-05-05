@@ -7,6 +7,12 @@ import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
 import java.time.OffsetDateTime
+import java.util.Optional
+
+interface UpcomingDrEventProjection {
+    fun getDrEventDate(): OffsetDateTime
+    fun getDrEventWindow(): String
+}
 
 interface CustomerDrEventWithDateProjection {
     val customerDrEventId: Long
@@ -88,5 +94,23 @@ interface CustomerDrEventRepository : JpaRepository<CustomerDrEvent, Long> {
         @Param("startDate") startDate: OffsetDateTime,
         @Param("endDate") endDate: OffsetDateTime
     ): Double
+
+    @Query(
+        value = """
+            SELECT de.dr_event_date  AS drEventDate,
+                   de.dr_event_window::text AS drEventWindow
+            FROM dashboard.dr_event de
+            JOIN dashboard.utility u ON de.utility_id = u.utility_id
+            JOIN dashboard.customer c ON c.utility_id = u.utility_id
+            WHERE c.customer_id = :customerId
+              AND de.dr_event_date > NOW()
+            ORDER BY de.dr_event_date ASC
+            LIMIT 1
+        """,
+        nativeQuery = true
+    )
+    fun findUpcomingDrEventByCustomerId(
+        @Param("customerId") customerId: Long
+    ): Optional<UpcomingDrEventProjection>
 }
 

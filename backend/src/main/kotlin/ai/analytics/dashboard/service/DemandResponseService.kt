@@ -4,7 +4,9 @@ import ai.analytics.dashboard.dto.DemandResponseAccountSummaryResponse
 import ai.analytics.dashboard.dto.DemandResponseRewardsBreakdown
 import ai.analytics.dashboard.dto.DemandResponseRewardsResponse
 import ai.analytics.dashboard.dto.DrOngoingIncentiveEntry
+import ai.analytics.dashboard.dto.UpcomingDrEventResponse
 import ai.analytics.dashboard.exception.CustomerNotFoundException
+import ai.analytics.dashboard.exception.NoDrEventException
 import ai.analytics.dashboard.exception.UtilityNotFoundException
 import ai.analytics.dashboard.repository.CustomerDrEventRepository
 import ai.analytics.dashboard.repository.CustomerRepository
@@ -85,6 +87,19 @@ class DemandResponseService(
                 signUpIncentive = signUpIncentive,
                 ongoingIncentive = ongoingIncentiveEntries
             )
+        )
+    }
+
+    fun getUpcomingDrEvent(customerId: Long): UpcomingDrEventResponse {
+        customerRepository.findById(customerId)
+            .orElseThrow { CustomerNotFoundException(customerId) }
+
+        val projection = customerDrEventRepository.findUpcomingDrEventByCustomerId(customerId)
+            .orElseThrow { NoDrEventException(customerId) }
+
+        return UpcomingDrEventResponse(
+            drEventDate = projection.getDrEventDate(),
+            drEventWindow = projection.getDrEventWindow()
         )
     }
 }
