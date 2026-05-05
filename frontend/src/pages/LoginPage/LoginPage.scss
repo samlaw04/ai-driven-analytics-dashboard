@@ -1,0 +1,92 @@
+$primary-blue: #002C5F;
+$page-background: #F8F9FA;
+$border: #CBD5E0;
+$text: #102A43;
+$label-text: #0b5fb5;
+$white: #FFFFFF;
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: $page-background;
+  padding: 20px;
+
+  .login-card {
+    background-color: $white;
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 16px;
+    border: 1px solid $border;
+    text-align: center;
+
+    .login-card-header {
+      color: $primary-blue;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 32px;
+      display: block;
+      border-bottom: none;
+    }
+
+    .login-card-title {
+      color: $text;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 32px;
+    }
+
+    .login-form {
+      text-align: left;
+
+      .form {
+        label {
+          display: block;
+          font-size: 16px;
+          font-weight: 600;
+          color: $label-text;
+          margin-bottom: 8px;
+        }
+
+        input {
+          width: 100%;
+          padding: 12px 16px;
+          font-size: 14px;
+          border-radius: 8px;
+          border: 1px solid $border;
+          box-sizing: border-box;
+        }
+
+        &.margin-bottom {
+          margin-bottom: 20px;
+        }
+
+        .input-error {
+          border-color: red;
+        }
+
+      }
+      .error-message {
+        color: red;
+        font-size: 12px;
+        margin-top: 8px;
+      }
+
+
+      .submit-button {
+        width: 100%;
+        background-color: $primary-blue;
+        color: $white;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 12px;
+      }
+    }
+  }
+}

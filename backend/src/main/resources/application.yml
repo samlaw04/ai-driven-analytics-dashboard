@@ -4,7 +4,7 @@ spring:
         locations: classpath:db/migration, classpath:db/migration/default, classpath:db/migration/script
         create-schemas: true
         schemas: dashboard
-        table: analytics_dashboard_db_flyway_version
+        table: ai_dashboard_db_flyway_version
         baseline-on-migrate: true
         baseline-version: 0
     jpa:
