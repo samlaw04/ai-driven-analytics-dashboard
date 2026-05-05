@@ -2,6 +2,7 @@ package ai.analytics.dashboard.controller
 
 import ai.analytics.dashboard.dto.AuthRequest
 import ai.analytics.dashboard.dto.AuthResponse
+import ai.analytics.dashboard.dto.UpdatePasswordRequest
 import ai.analytics.dashboard.service.AuthService
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
@@ -18,6 +19,12 @@ class AuthController(private val authService: AuthService) {
     fun login(@Valid @RequestBody request: AuthRequest): ResponseEntity<AuthResponse> {
         val response = authService.authenticate(request)
         return ResponseEntity.ok(response)
+    }
+
+    @PostMapping("/update-password")
+    fun updatePassword(@Valid @RequestBody request: UpdatePasswordRequest): ResponseEntity<Void> {
+        authService.updatePassword(request)
+        return ResponseEntity.noContent().build()
     }
 }
 

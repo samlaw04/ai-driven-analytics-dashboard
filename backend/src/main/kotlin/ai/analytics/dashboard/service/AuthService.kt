@@ -2,6 +2,7 @@ package ai.analytics.dashboard.service
 
 import ai.analytics.dashboard.dto.AuthRequest
 import ai.analytics.dashboard.dto.AuthResponse
+import ai.analytics.dashboard.dto.UpdatePasswordRequest
 import ai.analytics.dashboard.exception.InvalidCredentialsException
 import ai.analytics.dashboard.repository.CustomerRepository
 import org.springframework.stereotype.Service
@@ -18,6 +19,18 @@ class AuthService(private val customerRepository: CustomerRepository) {
             .orElseThrow { InvalidCredentialsException() }
 
         return AuthResponse(customerId = customer.customerId)
+    }
+
+    fun updatePassword(request: UpdatePasswordRequest) {
+        val customer = customerRepository
+            .findByEmail(request.email)
+            .orElseThrow { InvalidCredentialsException() }
+
+        if (customer.password != sha256(request.password)) {
+            throw InvalidCredentialsException()
+        }
+
+        customerRepository.save(customer.copy(password = sha256(request.newPassword)))
     }
 
     private fun sha256(input: String): String {

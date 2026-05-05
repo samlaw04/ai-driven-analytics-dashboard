@@ -8,5 +8,6 @@ import java.util.Optional
 @Repository
 interface CustomerRepository : JpaRepository<Customer, Long> {
     fun findByEmailAndPassword(email: String, password: String): Optional<Customer>
+    fun findByEmail(email: String): Optional<Customer>
 }
 
