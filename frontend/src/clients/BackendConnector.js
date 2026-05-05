@@ -114,6 +114,21 @@ export const getUpcomingDrEvent = async (customerId) => {
     return response.json();
 };
 
+export const getCurrentSchedule = async (customerId) => {
+    const response = await fetch(`${BASE_URL}/schedule/current`, {
+        method: 'GET',
+        headers: {
+            'Customer-Id': customerId,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch current schedule with status: ${response.status}`);
+    }
+
+    return response.json();
+};
+
 export const getUserProfile = async (customerId) => {
     const response = await fetch(`${BASE_URL}/user/profile`, {
         method: 'GET',
