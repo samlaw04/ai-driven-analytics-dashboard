@@ -3,13 +3,45 @@ package ai.analytics.dashboard.exception
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.bind.MissingRequestHeaderException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 
 data class ErrorResponse(val status: Int, val error: String, val message: String)
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
+
+    @ExceptionHandler(CustomerNotFoundException::class)
+    fun handleCustomerNotFound(ex: CustomerNotFoundException): ResponseEntity<ErrorResponse> {
+        val body = ErrorResponse(
+            status = HttpStatus.NOT_FOUND.value(),
+            error = "Not Found",
+            message = ex.message ?: "Customer not found"
+        )
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body)
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException::class)
+    fun handleMissingHeader(ex: MissingRequestHeaderException): ResponseEntity<ErrorResponse> {
+        val body = ErrorResponse(
+            status = HttpStatus.BAD_REQUEST.value(),
+            error = "Bad Request",
+            message = "Missing required header: ${ex.headerName}"
+        )
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body)
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException::class)
+    fun handleTypeMismatch(ex: MethodArgumentTypeMismatchException): ResponseEntity<ErrorResponse> {
+        val body = ErrorResponse(
+            status = HttpStatus.BAD_REQUEST.value(),
+            error = "Bad Request",
+            message = "Invalid value for '${ex.name}': '${ex.value}' is not a valid number"
+        )
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body)
+    }
 
     @ExceptionHandler(InvalidCredentialsException::class)
     fun handleInvalidCredentials(ex: InvalidCredentialsException): ResponseEntity<ErrorResponse> {

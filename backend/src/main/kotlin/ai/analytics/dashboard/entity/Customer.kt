@@ -1,6 +1,7 @@
 package ai.analytics.dashboard.entity
 
 import jakarta.persistence.*
+import java.time.OffsetDateTime
 
 @Entity
 @Table(name = "customer", schema = "dashboard")
@@ -26,7 +27,10 @@ data class Customer(
     @Column(name = "email", nullable = false, unique = true)
     val email: String = "",
 
-    @Column(name = "enrollment_status")
-    val enrollmentStatus: String? = null
-)
+    @Column(name = "created_date")
+    val createdDate: OffsetDateTime? = null,
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "enrollment_status")
+    val enrollmentStatus: EnrollmentStatus? = null
+)
