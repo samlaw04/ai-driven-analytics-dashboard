@@ -31,6 +31,8 @@ data class Schedule(
     val potentialSavings: Double = 0.0,
 
     @Column(name = "kwh_shifted")
-    val kwhShifted: Double = 0.0
-)
+    val kwhShifted: Double = 0.0,
 
+    @Column(name = "charge_windows", columnDefinition = "jsonb")
+    val chargeWindows: String? = null
+)
