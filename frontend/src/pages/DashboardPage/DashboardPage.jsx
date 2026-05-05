@@ -36,6 +36,7 @@ const DashboardPage = () => {
                     <div className="dashboard-main__content">
                         {programType === 'DP' && <DPAccountSummary />}
                         {programType === 'DR' && <DRAccountSummary />}
+                        {programType === 'DR' && <UpcomingDrEvent />}
                         <RewardsSummary />
                         <ProgramDetails />
                     </div>

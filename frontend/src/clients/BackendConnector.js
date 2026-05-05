@@ -95,6 +95,25 @@ export const getProgramDetails = async (utilityId) => {
     return response.json();
 };
 
+export const getUpcomingDrEvent = async (customerId) => {
+    const response = await fetch(`${BASE_URL}/demand-response/upcoming-event`, {
+        method: 'GET',
+        headers: {
+            'Customer-Id': customerId,
+        },
+    });
+
+    if (response.status === 404) {
+        return null;
+    }
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch upcoming DR event with status: ${response.status}`);
+    }
+
+    return response.json();
+};
+
 export const getUserProfile = async (customerId) => {
     const response = await fetch(`${BASE_URL}/user/profile`, {
         method: 'GET',
