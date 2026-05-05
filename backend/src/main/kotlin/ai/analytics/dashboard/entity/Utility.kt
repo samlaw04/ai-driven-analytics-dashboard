@@ -16,6 +16,12 @@ data class Utility(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "program_type", nullable = false)
-    val programType: ProgramType = ProgramType.DP
+    val programType: ProgramType = ProgramType.DP,
+
+    @Column(name = "sign_up_incentive")
+    val signUpIncentive: Double? = null,
+
+    @Column(name = "ongoing_incentive")
+    val ongoingIncentive: Double? = null
 )
 

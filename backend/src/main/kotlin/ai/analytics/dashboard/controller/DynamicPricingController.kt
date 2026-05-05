@@ -1,6 +1,7 @@
 package ai.analytics.dashboard.controller
 
 import ai.analytics.dashboard.dto.DynamicPricingAccountSummaryResponse
+import ai.analytics.dashboard.dto.DynamicPricingRewardsResponse
 import ai.analytics.dashboard.service.DynamicPricingService
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
@@ -23,5 +24,16 @@ class DynamicPricingController(private val dynamicPricingService: DynamicPricing
         val summary = dynamicPricingService.getAccountSummary(customerId, startDate, endDate)
         return ResponseEntity.ok(summary)
     }
+
+    @GetMapping("/rewards")
+    fun getRewards(
+        @RequestHeader("Customer-Id") customerId: Long,
+        @RequestHeader("Start-Date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) startDate: OffsetDateTime,
+        @RequestHeader("End-Date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) endDate: OffsetDateTime
+    ): ResponseEntity<DynamicPricingRewardsResponse> {
+        val rewards = dynamicPricingService.getRewards(customerId, startDate, endDate)
+        return ResponseEntity.ok(rewards)
+    }
 }
+
 
