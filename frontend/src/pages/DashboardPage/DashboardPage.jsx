@@ -4,6 +4,7 @@ import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import { getUserProfile } from '../../clients/BackendConnector';
 import Header from '../../components/Header/Header';
 import DPAccountSummary from '../../components/DPAccountSummary/DPAccountSummary';
+import DRAccountSummary from '../../components/DRAccountSummary/DRAccountSummary';
 import './DashboardPage.scss';
 
 const DashboardPage = () => {
@@ -70,7 +71,7 @@ const DashboardPage = () => {
                 <Row className="mb-3">
                     <Col xs={12}>
                         {programType === 'DP' && <DPAccountSummary />}
-                        {/* programType === 'DR' && <DRActivitySummary /> */}
+                        {programType === 'DR' && <DRAccountSummary />}
                     </Col>
                 </Row>
 

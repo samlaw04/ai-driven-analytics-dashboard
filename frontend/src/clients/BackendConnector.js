@@ -62,3 +62,20 @@ export const getDPAccountSummary = async (customerId, startDate, endDate) => {
 
     return response.json();
 };
+
+export const getDRAccountSummary = async (customerId, startDate, endDate) => {
+    const response = await fetch(`${BASE_URL}/api/demand-response/account-summary`, {
+        method: 'GET',
+        headers: {
+            'Customer-Id': customerId,
+            'Start-Date': startDate,
+            'End-Date': endDate,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch DR account summary');
+    }
+
+    return response.json();
+};
