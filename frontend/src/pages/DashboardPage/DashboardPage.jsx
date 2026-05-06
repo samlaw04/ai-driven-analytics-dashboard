@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Spinner } from 'react-bootstrap';
-import { getUserProfile, getUtilityProgramDetails } from '../../clients/BackendConnector';
+import { getUserProfile } from '../../clients/BackendConnector';
+import Header from '../../components/Header/Header';
 import './DashboardPage.scss';
 
 const DashboardPage = () => {
@@ -20,8 +21,6 @@ const DashboardPage = () => {
         const fetchDashboardData = async () => {
             try {
                 const profile = await getUserProfile(customerId);
-
-                const details = await getUtilityProgramDetails(profile.utility.utilityId);
 
                 sessionStorage.setItem('utilityId', profile.utility.utilityId);
                 sessionStorage.setItem('programType', profile.utility.programType);
@@ -56,6 +55,8 @@ const DashboardPage = () => {
 
     return (
         <div className="dashboard-page">
+            <Header />
+
             <Container className="dashboard-container py-4">
 
                 {dashboardTitle && (
