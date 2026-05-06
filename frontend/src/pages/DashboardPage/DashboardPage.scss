@@ -1,0 +1,35 @@
+$primary-blue: #002C5F;
+$page-background: #F0F2F5;
+$card-background: #FFFFFF;
+$border: #CBD5E0;
+$text: #102A43;
+$spinner-color: #002C5F;
+
+.dashboard-page {
+  min-height: 100vh;
+  background-color: $page-background;
+}
+
+.dashboard-container {
+  max-width: 480px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.dashboard-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: $primary-blue;
+  letter-spacing: 0.01em;
+}
+
+.dashboard-loading {
+  background-color: $page-background;
+  min-height: 100vh;
+}
+
+.dashboard-spinner {
+  color: $spinner-color;
+  width: 2.5rem;
+  height: 2.5rem;
+}
