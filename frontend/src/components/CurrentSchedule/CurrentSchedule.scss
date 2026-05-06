@@ -1,0 +1,198 @@
+$primary-blue: #002C5F;
+$card-background: #FFFFFF;
+$border: #CBD5E0;
+$text: #102A43;
+$muted: #718096;
+$timeline-track: #E2E8F0;
+$color-charge: $primary-blue;
+$color-complete: #38A169;
+$color-stopped: #A0AEC0;
+$error-red: #C53030;
+$state-bg: #F7FAFC;
+
+.schedule-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.schedule-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $text;
+  margin-bottom: 10px;
+}
+
+.schedule-card {
+  background-color: $card-background;
+  border: 1px solid $border;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  flex: 1;
+}
+
+// ── Top row ───────────────────────────────────────────────
+.schedule-top-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+// ── Vehicle info (left) ───────────────────────────────────
+.schedule-vehicle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.schedule-vehicle-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: $primary-blue;
+  margin-bottom: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.schedule-battery-text {
+  font-size: 0.82rem;
+  color: $muted;
+  margin-bottom: 0;
+}
+
+.schedule-battery-pct {
+  font-weight: 700;
+  color: $color-complete;
+}
+
+// ── Vehicle image (right) ─────────────────────────────────
+.schedule-image-wrapper {
+  flex-shrink: 0;
+  width: 52%;
+  height: 130px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.schedule-vehicle-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.schedule-image-placeholder {
+  font-size: 0.75rem;
+  color: $muted;
+}
+
+// ── Timeline ─────────────────────────────────────────────
+.schedule-timeline-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.schedule-timeline-track {
+  position: relative;
+  height: 13px;
+  background-color: $timeline-track;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.schedule-timeline-bar {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 999px;
+
+  &--charge {
+    background-color: $color-charge;
+  }
+
+  &--complete {
+    background-color: $color-complete;
+  }
+}
+
+.schedule-timeline-labels {
+  display: flex;
+  justify-content: space-between;
+
+  span {
+    font-size: 0.62rem;
+    color: $muted;
+  }
+}
+
+// ── Legend ───────────────────────────────────────────────
+.schedule-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 2px;
+}
+
+.schedule-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: $text;
+}
+
+.schedule-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &--charge {
+    background-color: $color-charge;
+  }
+
+  &--stopped {
+    background-color: transparent;
+    border: 2px solid $color-stopped;
+  }
+
+  &--complete {
+    background-color: $color-complete;
+  }
+}
+
+// ── State boxes ───────────────────────────────────────────
+.schedule-state-box {
+  background-color: $state-bg;
+  border-radius: 6px;
+  padding: 20px 16px;
+  text-align: center;
+
+  &--error {
+    background-color: #FFF5F5;
+  }
+}
+
+.schedule-state-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: $error-red;
+  margin-bottom: 4px;
+}
+
+.schedule-state-subtitle {
+  font-size: 0.76rem;
+  color: $error-red;
+  margin-bottom: 0;
+}
+
+.schedule-spinner {
+  color: $primary-blue;
+}

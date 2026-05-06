@@ -5,22 +5,22 @@ import './DRAccountSummary.scss';
 
 const getWeekRange = () => {
     const now = new Date();
-    const dayOfWeek = now.getDay();
-    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-    const monday = new Date(now);
-    monday.setDate(now.getDate() + mondayOffset);
-    monday.setHours(0, 0, 0, 0);
+    let previousTwoWeeks = new Date()
+    previousTwoWeeks.setDate(previousTwoWeeks.getDate() - 7)
+
     return {
-        startDate: monday.toISOString().replace(/\.\d{3}Z$/, 'Z'),
+        startDate: previousTwoWeeks.toISOString().replace(/\.\d{3}Z$/, 'Z'),
         endDate: now.toISOString().replace(/\.\d{3}Z$/, 'Z'),
     };
 };
 
-const getMonthRange = () => {
+const getPreviousTwoWeekRange = () => {
     const now = new Date();
-    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    let previousTwoWeeks = new Date()
+    previousTwoWeeks.setDate(previousTwoWeeks.getDate() - 14)
+
     return {
-        startDate: firstOfMonth.toISOString().replace(/\.\d{3}Z$/, 'Z'),
+        startDate: previousTwoWeeks.toISOString().replace(/\.\d{3}Z$/, 'Z'),
         endDate: now.toISOString().replace(/\.\d{3}Z$/, 'Z'),
     };
 };
@@ -32,7 +32,7 @@ const formatMinutesToHours = (minutes) => {
     return `${h}h ${m}m`;
 };
 
-const TrendIndicator = ({ value, format }) => {
+const TrendIndicator = ({ value, format, isUpArrow }) => {
     const rounded = format === 'minutes'
         ? Math.round(value)
         : format === 'kwh'
@@ -45,11 +45,11 @@ const TrendIndicator = ({ value, format }) => {
             ? `${Math.abs(rounded).toFixed(1)}`
             : Math.abs(rounded);
 
-    if (rounded > 0) {
-        return <span className="trend trend--positive">▲ +{display}</span>;
+    if (isUpArrow) {
+        return <span className="trend trend--positive">▲ {display}</span>;
     }
-    if (rounded < 0) {
-        return <span className="trend trend--negative">▼ -{display}</span>;
+    if (isUpArrow === false) {
+        return <span className="trend trend--negative">▼ {display}</span>;
     }
     return <span className="trend trend--neutral">— 0</span>;
 };
@@ -61,9 +61,31 @@ const formatValue = (value, format) => {
     return value;
 };
 
+function configureTrend(twoWeeksData, oneWeeksData) {
+    const secondWeekValue = twoWeeksData - oneWeeksData;
+    if (oneWeeksData > secondWeekValue) {
+        return oneWeeksData - secondWeekValue;
+    } else if (oneWeeksData < secondWeekValue) {
+        return secondWeekValue - oneWeeksData;
+    } else {
+        return oneWeeksData - secondWeekValue;
+    }
+}
+
+function isUp(twoWeeksData, oneWeeksData) {
+    const secondWeekValue = twoWeeksData - oneWeeksData;
+    if (oneWeeksData > secondWeekValue) {
+        return true
+    } else if (oneWeeksData < secondWeekValue) {
+        return false
+    } else {
+        return null
+    }
+}
+
 const DRAccountSummary = () => {
     const [weekData, setWeekData] = useState(null);
-    const [monthData, setMonthData] = useState(null);
+    const [previousTwoWeekData, setPreviousTwoWeekData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
@@ -76,15 +98,15 @@ const DRAccountSummary = () => {
 
         try {
             const weekRange = getWeekRange();
-            const monthRange = getMonthRange();
+            const lastTwoWeeksRange = getPreviousTwoWeekRange();
 
-            const [week, month] = await Promise.all([
+            const [week, twoWeeks] = await Promise.all([
                 getDRAccountSummary(customerId, weekRange.startDate, weekRange.endDate),
-                getDRAccountSummary(customerId, monthRange.startDate, monthRange.endDate),
+                getDRAccountSummary(customerId, lastTwoWeeksRange.startDate, lastTwoWeeksRange.endDate),
             ]);
 
             setWeekData(week);
-            setMonthData(month);
+            setPreviousTwoWeekData(twoWeeks);
         } catch {
             setError(true);
         } finally {
@@ -96,48 +118,54 @@ const DRAccountSummary = () => {
         fetchSummary();
     }, [fetchSummary]);
 
-    const rows = weekData && monthData
+    const rows = weekData && previousTwoWeekData
         ? [
             {
                 metric: 'Plug-ins',
                 week: weekData.numberOfPlugSessions,
-                month: monthData.numberOfPlugSessions,
-                trend: monthData.numberOfPlugSessions - weekData.numberOfPlugSessions,
+                twoWeeks: previousTwoWeekData.numberOfPlugSessions,
+                trend: configureTrend(previousTwoWeekData.numberOfPlugSessions, weekData.numberOfPlugSessions),
+                isUpArrow: isUp(previousTwoWeekData.numberOfPlugSessions, weekData.numberOfPlugSessions),
                 format: 'number',
             },
             {
                 metric: 'DR Events Scheduled',
                 week: weekData.drEventsScheduled,
-                month: monthData.drEventsScheduled,
-                trend: monthData.drEventsScheduled - weekData.drEventsScheduled,
+                twoWeeks: previousTwoWeekData.drEventsScheduled,
+                trend: configureTrend(previousTwoWeekData.drEventsScheduled, weekData.drEventsScheduled),
+                isUpArrow: isUp(previousTwoWeekData.drEventsScheduled, weekData.drEventsScheduled),
                 format: 'number',
             },
             {
                 metric: 'DR Events Participated in',
                 week: weekData.drEventsParticipatedIn,
-                month: monthData.drEventsParticipatedIn,
-                trend: monthData.drEventsParticipatedIn - weekData.drEventsParticipatedIn,
+                twoWeeks: previousTwoWeekData.drEventsParticipatedIn,
+                trend: configureTrend(previousTwoWeekData.drEventsParticipatedIn, weekData.drEventsParticipatedIn),
+                isUpArrow: isUp(previousTwoWeekData.drEventsParticipatedIn, weekData.drEventsParticipatedIn),
                 format: 'number',
             },
             {
                 metric: 'DR Events Overridden',
                 week: weekData.drEventsOverridden,
-                month: monthData.drEventsOverridden,
-                trend: monthData.drEventsOverridden - weekData.drEventsOverridden,
+                twoWeeks: previousTwoWeekData.drEventsOverridden,
+                trend: configureTrend(previousTwoWeekData.drEventsOverridden, weekData.drEventsOverridden),
+                isUpArrow: isUp(previousTwoWeekData.drEventsOverridden, weekData.drEventsOverridden),
                 format: 'number',
             },
             {
                 metric: 'KWH Shifted',
                 week: weekData.kwhShifted,
-                month: monthData.kwhShifted,
-                trend: monthData.kwhShifted - weekData.kwhShifted,
+                twoWeeks: previousTwoWeekData.kwhShifted,
+                trend: configureTrend(previousTwoWeekData.kwhShifted, weekData.kwhShifted),
+                isUpArrow: isUp(previousTwoWeekData.kwhShifted, weekData.kwhShifted),
                 format: 'kwh',
             },
             {
                 metric: 'Total time plugged in',
                 week: weekData.totalTimePluggedIn,
-                month: monthData.totalTimePluggedIn,
-                trend: monthData.totalTimePluggedIn - weekData.totalTimePluggedIn,
+                twoWeeks: previousTwoWeekData.totalTimePluggedIn,
+                trend: configureTrend(previousTwoWeekData.totalTimePluggedIn, weekData.totalTimePluggedIn),
+                isUpArrow: isUp(previousTwoWeekData.totalTimePluggedIn, weekData.totalTimePluggedIn),
                 format: 'minutes',
             },
         ]
@@ -181,18 +209,18 @@ const DRAccountSummary = () => {
                     <tr>
                         <th className="col-metric">METRIC</th>
                         <th className="col-value">THIS WEEK</th>
-                        <th className="col-value">THIS MONTH</th>
+                        <th className="col-value">LAST TWO WEEKS</th>
                         <th className="col-trend">TREND (DIRECTIONAL)</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {rows.map(({ metric, week, month, trend, format }) => (
+                    {rows.map(({ metric, week, twoWeeks, trend, isUpArrow, format }) => (
                         <tr key={metric}>
                             <td className="cell-metric">{metric}</td>
                             <td className="cell-value">{formatValue(week, format)}</td>
-                            <td className="cell-value">{formatValue(month, format)}</td>
+                            <td className="cell-value">{formatValue(twoWeeks, format)}</td>
                             <td className="cell-trend">
-                                <TrendIndicator value={trend} format={format} />
+                                <TrendIndicator value={trend} format={format} isUpArrow={isUpArrow} />
                             </td>
                         </tr>
                     ))}

@@ -128,3 +128,28 @@ export const getUpcomingDREvent = async (customerId) => {
 
     return response.json();
 };
+
+export const getCurrentSchedule = async (customerId) => {
+    const response = await fetch(`${BASE_URL}/api/schedule/current`, {
+        method: 'GET',
+        headers: {
+            'Customer-Id': customerId,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch current schedule');
+    }
+
+    return response.json();
+};
+
+export const getUtilityAverageStatistics = async (utilityId) => {
+    const response = await fetch(`${BASE_URL}/api/utility/average-statistics`, {
+        method: 'GET',
+        headers: { 'Utility-Id': utilityId },
+    });
+    if (!response.ok) throw new Error('Failed to fetch utility average statistics');
+    return response.json();
+};
+

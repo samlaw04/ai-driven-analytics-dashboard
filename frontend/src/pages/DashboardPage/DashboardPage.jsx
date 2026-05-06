@@ -9,6 +9,8 @@ import Rewards from '../../components/Rewards/Rewards';
 import ProgramDetails from '../../components/ProgramDetails/ProgramDetails';
 import UpcomingDREvent from '../../components/UpcomingDREvent/UpcomingDREvent';
 import './DashboardPage.scss';
+import CurrentSchedule from "../../components/CurrentSchedule/CurrentSchedule.jsx";
+import NeighbourhoodWatch from '../../components/NeighbourhoodWatch/NeighbourhoodWatch';
 
 const DashboardPage = () => {
     const [programType, setProgramType] = useState(null);
@@ -87,15 +89,17 @@ const DashboardPage = () => {
                     </Col>
                 </Row>
 
-                {/* ── Upcoming DR Event | Neighbourhood Watch ── */}
+                {/* ── Schedule | Neighbourhood Watch ── */}
                 <Row className="mb-3">
                     <Col xs={6} className="pe-2">
+                        {programType === 'DP' && <CurrentSchedule />}
                         {programType === 'DR' && <UpcomingDREvent />}
                     </Col>
                     <Col xs={6} className="ps-2">
-                        {/* <NeighbourhoodWatch /> */}
+                        <NeighbourhoodWatch programType={programType} />
                     </Col>
                 </Row>
+
 
             </Container>
         </div>

@@ -126,4 +126,39 @@ VALUES
 (40, 123, 104, FALSE),
 (40, 124, NULL, TRUE),
 (21, 125, 105, FALSE),
-(35, 126, 106, FALSE);
+(35, 126, 106, FALSE),
+-- Customer 1 (Sarah Jenkins, vehicle 1, DP) – 8 completed sessions (127-134)
+(1, 127, 109, FALSE),
+(1, 128, 110, FALSE),
+(1, 129, 111, FALSE),
+(1, 130, 112, FALSE),
+(1, 131, 113, FALSE),
+(1, 132, 114, FALSE),
+(1, 133, 115, FALSE),
+(1, 134, 116, FALSE),
+-- Customer 11 (Megan Rodriguez, vehicle 11, DP) – 8 completed + 1 active (135-143)
+(11, 135, 117, FALSE),
+(11, 136, 118, FALSE),
+(11, 137, 119, FALSE),
+(11, 138, 120, FALSE),
+(11, 139, 121, FALSE),
+(11, 140, 122, FALSE),
+(11, 141, 123, FALSE),
+(11, 142, 124, FALSE),
+(11, 143, NULL, TRUE),
+-- Customer 21 (Nicole Lopez, vehicle 21, DR) – 4 completed DR sessions (144-147)
+(21, 144, 125, FALSE),
+(21, 145, 126, FALSE),
+(21, 146, 127, FALSE),
+(21, 147, 128, FALSE),
+-- Customer 31 (Rachel Perez, vehicle 31, DR) – 4 completed DR sessions (148-151)
+(31, 148, 129, FALSE),
+(31, 149, 130, FALSE),
+(31, 150, 131, FALSE),
+(31, 151, 132, FALSE),
+-- Customer 21 (Nicole Lopez, vehicle 21, DR) extra last-week sessions (152-153)
+(21, 152, 133, FALSE),
+(21, 153, 134, FALSE),
+-- Customer 1 (Sarah Jenkins, vehicle 1, DP) extra last-week sessions (154-155)
+(1, 154, 135, FALSE),
+(1, 155, 136, FALSE);

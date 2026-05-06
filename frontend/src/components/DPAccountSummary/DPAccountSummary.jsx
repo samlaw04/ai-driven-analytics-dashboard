@@ -5,27 +5,27 @@ import './DPAccountSummary.scss';
 
 const getWeekRange = () => {
     const now = new Date();
-    const dayOfWeek = now.getDay();
-    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-    const monday = new Date(now);
-    monday.setDate(now.getDate() + mondayOffset);
-    monday.setHours(0, 0, 0, 0);
+    let twoWeekRange = new Date()
+    twoWeekRange.setDate(twoWeekRange.getDate() - 7)
+
     return {
-        startDate: monday.toISOString().replace(/\.\d{3}Z$/, 'Z'),
+        startDate: twoWeekRange.toISOString().replace(/\.\d{3}Z$/, 'Z'),
         endDate: now.toISOString().replace(/\.\d{3}Z$/, 'Z'),
     };
 };
 
-const getMonthRange = () => {
+const getPreviousTwoWeekRange = () => {
     const now = new Date();
-    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    let twoWeekRange = new Date()
+    twoWeekRange.setDate(twoWeekRange.getDate() - 14)
+
     return {
-        startDate: firstOfMonth.toISOString().replace(/\.\d{3}Z$/, 'Z'),
+        startDate: twoWeekRange.toISOString().replace(/\.\d{3}Z$/, 'Z'),
         endDate: now.toISOString().replace(/\.\d{3}Z$/, 'Z'),
     };
 };
 
-const TrendIndicator = ({ value, format }) => {
+const TrendIndicator = ({ value, format, isUpArrow }) => {
     const rounded = format === 'currency'
         ? Math.round(value * 100) / 100
         : format === 'kwh'
@@ -38,17 +38,17 @@ const TrendIndicator = ({ value, format }) => {
             ? Math.abs(rounded).toFixed(1)
             : Math.abs(rounded);
 
-    if (rounded > 0) {
+    if (isUpArrow) {
         return (
             <span className="trend trend--positive">
-                ▲ +{display}
+                ▲ {display}
             </span>
         );
     }
-    if (rounded < 0) {
+    if (isUpArrow === false) {
         return (
             <span className="trend trend--negative">
-                ▼ -{display}
+                ▼ {display}
             </span>
         );
     }
@@ -61,9 +61,32 @@ const formatValue = (value, format) => {
     return value;
 };
 
+function configureTrend(twoWeeksData, oneWeeksData) {
+    const secondWeekValue = twoWeeksData - oneWeeksData;
+    if (oneWeeksData > secondWeekValue) {
+        return oneWeeksData - secondWeekValue;
+    } else if (oneWeeksData < secondWeekValue) {
+        return secondWeekValue - oneWeeksData;
+    } else {
+        return oneWeeksData - secondWeekValue;
+    }
+}
+
+function isUp(twoWeeksData, oneWeeksData) {
+    const secondWeekValue = twoWeeksData - oneWeeksData;
+    if (oneWeeksData > secondWeekValue) {
+        return true
+    } else if (oneWeeksData < secondWeekValue) {
+        return false
+    } else {
+        return null
+    }
+}
+
+
 const DPAccountSummary = () => {
     const [weekData, setWeekData] = useState(null);
-    const [monthData, setMonthData] = useState(null);
+    const [twoWeekData, setTwoWeekData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
@@ -76,15 +99,15 @@ const DPAccountSummary = () => {
 
         try {
             const weekRange = getWeekRange();
-            const monthRange = getMonthRange();
+            const twoWeekRange = getPreviousTwoWeekRange();
 
-            const [week, month] = await Promise.all([
+            const [week, twoWeeks] = await Promise.all([
                 getDPAccountSummary(customerId, weekRange.startDate, weekRange.endDate),
-                getDPAccountSummary(customerId, monthRange.startDate, monthRange.endDate),
+                getDPAccountSummary(customerId, twoWeekRange.startDate, twoWeekRange.endDate),
             ]);
 
             setWeekData(week);
-            setMonthData(month);
+            setTwoWeekData(twoWeeks);
         } catch {
             setError(true);
         } finally {
@@ -96,48 +119,54 @@ const DPAccountSummary = () => {
         fetchSummary();
     }, [fetchSummary]);
 
-    const rows = weekData && monthData
+    const rows = weekData && twoWeekData
         ? [
             {
                 metric: 'Vehicle Plug-ins',
                 week: weekData.numberOfPlugSessions,
-                month: monthData.numberOfPlugSessions,
-                trend: monthData.numberOfPlugSessions - weekData.numberOfPlugSessions,
+                twoWeeks: twoWeekData.numberOfPlugSessions,
+                trend: configureTrend(twoWeekData.numberOfPlugSessions, weekData.numberOfPlugSessions),
+                isUpArrow: isUp(twoWeekData.numberOfPlugSessions, weekData.numberOfPlugSessions),
                 format: 'number',
             },
             {
                 metric: 'Schedules Followed',
                 week: weekData.schedulesFollowed,
-                month: monthData.schedulesFollowed,
-                trend: monthData.schedulesFollowed - weekData.schedulesFollowed,
+                twoWeeks: twoWeekData.schedulesFollowed,
+                trend: configureTrend(twoWeekData.schedulesFollowed, weekData.schedulesFollowed,),
+                isUpArrow: isUp(twoWeekData.schedulesFollowed, weekData.schedulesFollowed,),
                 format: 'number',
             },
             {
                 metric: 'Dollars Saved',
                 week: weekData.dollarsSaved,
-                month: monthData.dollarsSaved,
-                trend: monthData.dollarsSaved - weekData.dollarsSaved,
+                twoWeeks: twoWeekData.dollarsSaved,
+                trend: configureTrend(twoWeekData.dollarsSaved, weekData.dollarsSaved),
+                isUpArrow: isUp(twoWeekData.schedulesFollowed, weekData.schedulesFollowed,),
                 format: 'currency',
             },
             {
                 metric: 'Schedules Overridden',
                 week: weekData.schedulesOverridden,
-                month: monthData.schedulesOverridden,
-                trend: monthData.schedulesOverridden - weekData.schedulesOverridden,
+                twoWeeks: twoWeekData.schedulesOverridden,
+                trend: configureTrend(twoWeekData.schedulesOverridden, weekData.schedulesOverridden),
+                isUpArrow: isUp(twoWeekData.schedulesOverridden, weekData.schedulesOverridden),
                 format: 'number',
             },
             {
                 metric: 'Missed Savings',
                 week: weekData.missedSavings,
-                month: monthData.missedSavings,
-                trend: monthData.missedSavings - weekData.missedSavings,
+                twoWeeks: twoWeekData.missedSavings,
+                trend: configureTrend(twoWeekData.missedSavings, weekData.missedSavings),
+                isUpArrow: isUp(twoWeekData.missedSavings, weekData.missedSavings),
                 format: 'currency',
             },
             {
                 metric: 'KWH Shifted',
                 week: weekData.kwhShifted,
-                month: monthData.kwhShifted,
-                trend: monthData.kwhShifted - weekData.kwhShifted,
+                twoWeeks: twoWeekData.kwhShifted,
+                trend: configureTrend(twoWeekData.kwhShifted, weekData.kwhShifted),
+                isUpArrow: isUp(twoWeekData.kwhShifted, weekData.kwhShifted),
                 format: 'kwh',
             },
         ]
@@ -181,18 +210,18 @@ const DPAccountSummary = () => {
                     <tr>
                         <th className="col-metric">METRIC</th>
                         <th className="col-value">THIS WEEK</th>
-                        <th className="col-value">THIS MONTH</th>
+                        <th className="col-value">LAST TWO WEEKS</th>
                         <th className="col-trend">TREND (DIRECTIONAL)</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {rows.map(({ metric, week, month, trend, format }) => (
+                    {rows.map(({ metric, week, twoWeeks, trend, isUpArrow, format }) => (
                         <tr key={metric}>
                             <td className="cell-metric">{metric}</td>
                             <td className="cell-value">{formatValue(week, format)}</td>
-                            <td className="cell-value">{formatValue(month, format)}</td>
+                            <td className="cell-value">{formatValue(twoWeeks, format)}</td>
                             <td className="cell-trend">
-                                <TrendIndicator value={trend} format={format} />
+                                <TrendIndicator value={trend} format={format} isUpArrow={isUpArrow} />
                             </td>
                         </tr>
                     ))}

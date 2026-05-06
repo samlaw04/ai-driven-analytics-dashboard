@@ -73,4 +73,20 @@ VALUES
 (10, 121, 40, FALSE, 19.5000),
 (13, 122, 40, FALSE, 16.5000),
 (15, 123, 40, FALSE, 14.0000),
-(16, 124, 40, FALSE, 0.0000);
+(16, 124, 40, FALSE, 0.0000),
+-- Customer 21 (Nicole Lopez, vehicle 21, Smith Utilities DR) – 4 completed sessions (144-147)
+-- dr_event 7 (Apr 22), dr_event 17 (Apr 24), dr_event 18 (Apr 28), dr_event 5 (May 5)
+(7,  144, 21, FALSE, 14.8000),
+(17, 145, 21, FALSE, 16.5000),
+(18, 146, 21, TRUE,   0.0000),
+(5,  147, 21, FALSE, 15.0000),
+-- Customer 31 (Rachel Perez, vehicle 31, Electrical Energy DR) – 4 completed sessions (148-151)
+-- dr_event 20 (Apr 23), dr_event 15 (Apr 25), dr_event 21 (May 1), dr_event 13 (May 5)
+(20, 148, 31, FALSE, 17.5000),
+(15, 149, 31, TRUE,   0.0000),
+(21, 150, 31, FALSE, 14.5000),
+(13, 151, 31, FALSE, 16.2000),
+-- Customer 21 (Nicole Lopez, vehicle 21) extra last-week DR sessions (152-153)
+-- dr_event 23 (May 1), dr_event 24 (May 3)
+(23, 152, 21, FALSE, 13.5000),
+(24, 153, 21, FALSE, 16.0000);
