@@ -5,7 +5,7 @@ import { getUserProfile, getUtilityProgramDetails } from '../../clients/BackendC
 import './DashboardPage.scss';
 
 const DashboardPage = () => {
-    const [programDetails, setProgramDetails] = useState(null);
+    const [programType, setProgramType] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -20,12 +20,13 @@ const DashboardPage = () => {
         const fetchDashboardData = async () => {
             try {
                 const profile = await getUserProfile(customerId);
-                const details = await getUtilityProgramDetails(profile.utilityId);
 
-                sessionStorage.setItem('utilityId', profile.utilityId);
-                sessionStorage.setItem('programType', details.programType);
+                const details = await getUtilityProgramDetails(profile.utility.utilityId);
 
-                setProgramDetails(details);
+                sessionStorage.setItem('utilityId', profile.utility.utilityId);
+                sessionStorage.setItem('programType', profile.utility.programType);
+
+                setProgramType(profile.utility.programType);
             } catch {
                 // Individual components handle their own errors.
                 // If the title fails to load we still render the shell.
@@ -47,15 +48,19 @@ const DashboardPage = () => {
         );
     }
 
-    const isDR = programDetails?.programType === 'DR';
+    const dashboardTitle = programType === 'DR'
+        ? 'Demand Response Dashboard'
+        : programType === 'DP'
+            ? 'Dynamic Pricing Dashboard'
+            : null;
 
     return (
         <div className="dashboard-page">
             <Container className="dashboard-container py-4">
 
-                {programDetails && (
+                {dashboardTitle && (
                     <h1 className="dashboard-title text-center mb-4">
-                        {programDetails.utilityName} {programDetails.programName}
+                        {dashboardTitle}
                     </h1>
                 )}
 
@@ -69,7 +74,7 @@ const DashboardPage = () => {
                 {/* ── Rewards | Program Details ── */}
                 <Row className="mb-3">
                     <Col xs={6} className="pe-2">
-                        {/* isDR ? <DRRewards /> : <DPRewards /> */}
+                        {/* programType === 'DR' ? <DRRewards /> : <DPRewards /> */}
                     </Col>
                     <Col xs={6} className="ps-2">
                         {/* <ProgramDetails /> */}
@@ -79,7 +84,7 @@ const DashboardPage = () => {
                 {/* ── Schedule / Upcoming Event | Neighbourhood Watch ── */}
                 <Row className="mb-3">
                     <Col xs={6} className="pe-2">
-                        {/* isDR ? <UpcomingDREvent /> : <Schedule /> */}
+                        {/* programType === 'DR' ? <UpcomingDREvent /> : <Schedule /> */}
                     </Col>
                     <Col xs={6} className="ps-2">
                         {/* <NeighbourhoodWatch /> */}
