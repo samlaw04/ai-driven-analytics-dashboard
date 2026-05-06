@@ -45,3 +45,20 @@ export const getUtilityProgramDetails = async (utilityId) => {
 
     return response.json();
 };
+
+export const getDPAccountSummary = async (customerId, startDate, endDate) => {
+    const response = await fetch(`${BASE_URL}/api/dynamic-pricing/account-summary`, {
+        method: 'GET',
+        headers: {
+            'Customer-Id': customerId,
+            'Start-Date': startDate,
+            'End-Date': endDate,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch DP account summary');
+    }
+
+    return response.json();
+};

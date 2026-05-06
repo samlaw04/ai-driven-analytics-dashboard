@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import { getUserProfile } from '../../clients/BackendConnector';
 import Header from '../../components/Header/Header';
+import DPAccountSummary from '../../components/DPAccountSummary/DPAccountSummary';
 import './DashboardPage.scss';
 
 const DashboardPage = () => {
@@ -57,10 +58,10 @@ const DashboardPage = () => {
         <div className="dashboard-page">
             <Header />
 
-            <Container className="dashboard-container py-4">
+            <Container fluid className="dashboard-container py-4">
 
                 {dashboardTitle && (
-                    <h1 className="dashboard-title text-center mb-4">
+                    <h1 className="dashboard-title text-center mb-3">
                         {dashboardTitle}
                     </h1>
                 )}
@@ -68,7 +69,8 @@ const DashboardPage = () => {
                 {/* ── Activity Summary ── */}
                 <Row className="mb-3">
                     <Col xs={12}>
-                        {/* <ActivitySummary /> */}
+                        {programType === 'DP' && <DPAccountSummary />}
+                        {/* programType === 'DR' && <DRActivitySummary /> */}
                     </Col>
                 </Row>
 
