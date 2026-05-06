@@ -12,7 +12,9 @@ import ai.analytics.dashboard.repository.CustomerDrEventRepository
 import ai.analytics.dashboard.repository.CustomerRepository
 import ai.analytics.dashboard.repository.UtilityRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
+import java.time.ZoneOffset
 
 @Service
 class DemandResponseService(
@@ -90,17 +92,25 @@ class DemandResponseService(
         )
     }
 
-    fun getUpcomingDrEvent(customerId: Long): UpcomingDrEventResponse {
+    fun getUpcomingDrEvent(customerId: Long): UpcomingDrEventResponse? {
+        try {
+
         customerRepository.findById(customerId)
             .orElseThrow { CustomerNotFoundException(customerId) }
 
         val projection = customerDrEventRepository.findUpcomingDrEventByCustomerId(customerId)
-            .orElseThrow { NoDrEventException(customerId) }
+            .orElse(null) ?: return null
 
-        return UpcomingDrEventResponse(
-            drEventDate = projection.getDrEventDate(),
-            drEventWindow = projection.getDrEventWindow()
-        )
+            return UpcomingDrEventResponse(
+                drEventDate = projection.getDrEventDate().atOffset(ZoneOffset.UTC),
+                drEventWindow = projection.getDrEventWindow()
+            )
+
+        } catch (e: Exception) {
+            println(e)
+        }
+        return null
     }
+
 }
 

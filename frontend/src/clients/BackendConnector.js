@@ -81,7 +81,6 @@ export const getDRAccountSummary = async (customerId, startDate, endDate) => {
 };
 
 export const getDRRewards = async (customerId, startDate, endDate) => {
-    console.log(startDate + "     " + endDate)
     const response = await fetch(`${BASE_URL}/api/demand-response/rewards`, {
         method: 'GET',
         headers: {
@@ -99,7 +98,6 @@ export const getDRRewards = async (customerId, startDate, endDate) => {
 };
 
 export const getDPRewards = async (customerId, startDate, endDate) => {
-    console.log(startDate + "     " + endDate)
     const response = await fetch(`${BASE_URL}/api/dynamic-pricing/rewards`, {
         method: 'GET',
         headers: {
@@ -111,6 +109,21 @@ export const getDPRewards = async (customerId, startDate, endDate) => {
 
     if (!response.ok) {
         throw new Error('Failed to fetch DP rewards');
+    }
+
+    return response.json();
+};
+
+export const getUpcomingDREvent = async (customerId) => {
+    const response = await fetch(`${BASE_URL}/api/demand-response/upcoming-event`, {
+        method: 'GET',
+        headers: {
+            'Customer-Id': customerId,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch upcoming DR event');
     }
 
     return response.json();

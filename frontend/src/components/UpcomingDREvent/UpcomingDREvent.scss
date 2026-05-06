@@ -1,0 +1,170 @@
+$primary-blue: #002C5F;
+$card-background: #FFFFFF;
+$border: #CBD5E0;
+$text: #102A43;
+$muted: #718096;
+$event-box-bg: #EBF4FF;
+$event-box-border: #BEE3F8;
+$empty-box-bg: #F7FAFC;
+$error-red: #C53030;
+$timeline-track: #E2E8F0;
+$timeline-bar: $primary-blue;
+
+.upcoming-dr-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.upcoming-dr-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $text;
+  margin-bottom: 10px;
+}
+
+.upcoming-dr-card {
+  background-color: $card-background;
+  border: 1px solid $border;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  flex: 1;
+}
+
+// ── Event box ────────────────────────────────────────────
+.upcoming-dr-event-box {
+  background-color: $event-box-bg;
+  border: 1px solid $event-box-border;
+  border-radius: 6px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.upcoming-dr-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: $primary-blue;
+}
+
+.upcoming-dr-event-time {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: $primary-blue;
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+
+// ── Timeline section ──────────────────────────────────────
+.upcoming-dr-timeline-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.upcoming-dr-timeline-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: $muted;
+  margin-bottom: 2px;
+}
+
+.upcoming-dr-timeline-track {
+  position: relative;
+  height: 20px;
+  background-color: $timeline-track;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.upcoming-dr-timeline-bar {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background-color: $timeline-bar;
+  border-radius: 2px;
+}
+
+.upcoming-dr-timeline-labels {
+  display: flex;
+  justify-content: space-between;
+
+  span {
+    font-size: 0.65rem;
+    color: $muted;
+  }
+}
+
+// ── Legend ───────────────────────────────────────────────
+.upcoming-dr-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.upcoming-dr-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: $text;
+}
+
+.upcoming-dr-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &--event {
+    background-color: $primary-blue;
+  }
+
+  &--normal {
+    background-color: transparent;
+    border: 2px solid $timeline-track;
+  }
+}
+
+// ── Empty / error states ─────────────────────────────────
+.upcoming-dr-state-box {
+  background-color: $empty-box-bg;
+  border-radius: 6px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+
+  &--error {
+    background-color: #FFF5F5;
+  }
+}
+
+.upcoming-dr-state-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: $muted;
+  margin-bottom: 0;
+
+  &--empty {
+    color: $error-red;
+  }
+}
+
+.upcoming-dr-state-subtitle {
+  font-size: 0.78rem;
+  color: $error-red;
+  margin-bottom: 0;
+}
+
+.upcoming-dr-spinner {
+  color: $primary-blue;
+}

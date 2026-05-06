@@ -41,6 +41,7 @@ class DemandResponseController(private val demandResponseService: DemandResponse
         @RequestHeader("Customer-Id") customerId: Long
     ): ResponseEntity<UpcomingDrEventResponse> {
         val response = demandResponseService.getUpcomingDrEvent(customerId)
+            ?: return ResponseEntity.noContent().build()
         return ResponseEntity.ok(response)
     }
 }

@@ -7,6 +7,7 @@ import DPAccountSummary from '../../components/DPAccountSummary/DPAccountSummary
 import DRAccountSummary from '../../components/DRAccountSummary/DRAccountSummary';
 import Rewards from '../../components/Rewards/Rewards';
 import ProgramDetails from '../../components/ProgramDetails/ProgramDetails';
+import UpcomingDREvent from '../../components/UpcomingDREvent/UpcomingDREvent';
 import './DashboardPage.scss';
 
 const DashboardPage = () => {
@@ -86,10 +87,10 @@ const DashboardPage = () => {
                     </Col>
                 </Row>
 
-                {/* ── Schedule / Upcoming Event | Neighbourhood Watch ── */}
+                {/* ── Upcoming DR Event | Neighbourhood Watch ── */}
                 <Row className="mb-3">
                     <Col xs={6} className="pe-2">
-                        {/* programType === 'DR' ? <UpcomingDREvent /> : <Schedule /> */}
+                        {programType === 'DR' && <UpcomingDREvent />}
                     </Col>
                     <Col xs={6} className="ps-2">
                         {/* <NeighbourhoodWatch /> */}
