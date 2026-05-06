@@ -5,6 +5,7 @@ import { getUserProfile } from '../../clients/BackendConnector';
 import Header from '../../components/Header/Header';
 import DPAccountSummary from '../../components/DPAccountSummary/DPAccountSummary';
 import DRAccountSummary from '../../components/DRAccountSummary/DRAccountSummary';
+import Rewards from '../../components/Rewards/Rewards';
 import './DashboardPage.scss';
 
 const DashboardPage = () => {
@@ -78,7 +79,7 @@ const DashboardPage = () => {
                 {/* ── Rewards | Program Details ── */}
                 <Row className="mb-3">
                     <Col xs={6} className="pe-2">
-                        {/* programType === 'DR' ? <DRRewards /> : <DPRewards /> */}
+                        <Rewards programType={programType} />
                     </Col>
                     <Col xs={6} className="ps-2">
                         {/* <ProgramDetails /> */}

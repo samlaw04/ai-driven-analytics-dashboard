@@ -1,0 +1,77 @@
+$primary-blue: #002C5F;
+$card-background: #FFFFFF;
+$border: #CBD5E0;
+$text: #102A43;
+$muted: #718096;
+$empty-grey: #A0AEC0;
+$warning-orange: #C05621;
+$negative-red: #C53030;
+
+.rewards-card {
+  background-color: $card-background;
+  border: 1px solid $border;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.rewards-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: $muted;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.rewards-amount {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: $primary-blue;
+  margin-bottom: 2px;
+  line-height: 1.1;
+
+  &--empty {
+    color: $empty-grey;
+    font-weight: 700;
+  }
+}
+
+.rewards-earned-date {
+  font-size: 0.78rem;
+  color: $muted;
+  margin-bottom: 16px;
+}
+
+.rewards-entries {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  .rewards-entry {
+    font-size: 0.8rem;
+    color: $text;
+    padding: 6px 0;
+    border-top: 1px solid $border;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.rewards-error {
+  font-size: 0.8rem;
+  color: $warning-orange;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rewards-error-icon {
+  font-size: 0.75rem;
+}
+
+.rewards-spinner {
+  color: $primary-blue;
+}

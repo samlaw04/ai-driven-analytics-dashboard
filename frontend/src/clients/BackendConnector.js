@@ -79,3 +79,39 @@ export const getDRAccountSummary = async (customerId, startDate, endDate) => {
 
     return response.json();
 };
+
+export const getDRRewards = async (customerId, startDate, endDate) => {
+    console.log(startDate + "     " + endDate)
+    const response = await fetch(`${BASE_URL}/api/demand-response/rewards`, {
+        method: 'GET',
+        headers: {
+            'Customer-Id': customerId,
+            'Start-Date': startDate,
+            'End-Date': endDate,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch DR rewards');
+    }
+
+    return response.json();
+};
+
+export const getDPRewards = async (customerId, startDate, endDate) => {
+    console.log(startDate + "     " + endDate)
+    const response = await fetch(`${BASE_URL}/api/dynamic-pricing/rewards`, {
+        method: 'GET',
+        headers: {
+            'Customer-Id': customerId,
+            'Start-Date': startDate,
+            'End-Date': endDate,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch DP rewards');
+    }
+
+    return response.json();
+};
