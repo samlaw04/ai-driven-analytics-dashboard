@@ -6,6 +6,7 @@ import Header from '../../components/Header/Header';
 import DPAccountSummary from '../../components/DPAccountSummary/DPAccountSummary';
 import DRAccountSummary from '../../components/DRAccountSummary/DRAccountSummary';
 import Rewards from '../../components/Rewards/Rewards';
+import ProgramDetails from '../../components/ProgramDetails/ProgramDetails';
 import './DashboardPage.scss';
 
 const DashboardPage = () => {
@@ -31,7 +32,6 @@ const DashboardPage = () => {
                 setProgramType(profile.utility.programType);
             } catch {
                 // Individual components handle their own errors.
-                // If the title fails to load we still render the shell.
             } finally {
                 setLoading(false);
             }
@@ -82,7 +82,7 @@ const DashboardPage = () => {
                         <Rewards programType={programType} />
                     </Col>
                     <Col xs={6} className="ps-2">
-                        {/* <ProgramDetails /> */}
+                        <ProgramDetails />
                     </Col>
                 </Row>
 

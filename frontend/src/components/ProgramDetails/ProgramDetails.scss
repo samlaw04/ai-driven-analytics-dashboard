@@ -1,0 +1,91 @@
+$primary-blue: #002C5F;
+$card-background: #FFFFFF;
+$border: #CBD5E0;
+$text: #102A43;
+$muted: #718096;
+$unavailable-bg: #EDF2F7;
+$incentive-bg: #EBF4FF;
+$incentive-border: #BEE3F8;
+
+.program-details-card {
+  background-color: $card-background;
+  border: 1px solid $border;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.program-details-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: $muted;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.program-details-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: $primary-blue;
+  margin-bottom: 10px;
+}
+
+.program-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.program-details-description {
+  font-size: 0.8rem;
+  color: $text;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+.program-details-incentive {
+  background-color: $incentive-bg;
+  border: 1px solid $incentive-border;
+  border-radius: 6px;
+  padding: 8px 12px;
+
+  .program-details-incentive-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $primary-blue;
+    margin-bottom: 3px;
+  }
+
+  .program-details-incentive-text {
+    font-size: 0.8rem;
+    color: $text;
+    font-weight: 500;
+    margin-bottom: 0;
+    line-height: 1.4;
+  }
+}
+
+.program-details-unavailable {
+  background-color: $unavailable-bg;
+  border-radius: 6px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+
+  p {
+    font-size: 0.82rem;
+    color: $muted;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+.program-details-spinner {
+  color: $primary-blue;
+}
