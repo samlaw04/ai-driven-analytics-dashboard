@@ -1,19 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { BrowserRouter as Router,Route, Routes} from "react-router-dom";
-import './index.scss'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import LoginPage from "./pages/LoginPage/LoginPage.jsx";
-import DashboardPage from "./pages/DashboardPage/DashboardPage.jsx";
-
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css';
+import LoginPage from './pages/LoginPage/LoginPage.jsx';
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
-        <Router>
+        <BrowserRouter>
             <Routes>
-                <Route path="/login" element={<LoginPage/>}/>
-                <Route path="/dashboard" element={<DashboardPage/>}/>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
-        </Router>
+        </BrowserRouter>
     </StrictMode>
-)
+);

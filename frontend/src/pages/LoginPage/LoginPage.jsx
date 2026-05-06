@@ -1,78 +1,90 @@
-import React, {useEffect, useState} from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Container, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { authenticateUser } from '../../clients/BackendConnector';
 import './LoginPage.scss';
-
-import {authenticateUser} from "../../clients/BackendConnector.js";
-import {useNavigate} from "react-router-dom";
-
-import Card from "react-bootstrap/Card";
-import {CardBody, CardHeader, CardTitle, Container} from "react-bootstrap";
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        sessionStorage.clear()
-    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const response = await authenticateUser(email, password)
-            sessionStorage.setItem("customerId", response.customerId)
-            navigate("/dashboard")
-        } catch {
-            setError(true)
-        }
+        setError(null);
+        setLoading(true);
 
+        try {
+            const data = await authenticateUser(email, password);
+            sessionStorage.setItem('customerId', data.customerId);
+            navigate('/dashboard');
+        } catch {
+            setError('Invalid email or password. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        <Container className="login-page">
+        <Container className="login-page d-flex align-items-center justify-content-center min-vh-100">
             <Card className="login-card">
-                <CardHeader className="login-card-header">
-                    <span>Ford Energy Rewards</span>
-                </CardHeader>
-                <CardTitle className="login-card-title">
-                    <span>Sign In</span>
-                </CardTitle>
-                <CardBody>
-                    <form className="login-form" onSubmit={handleSubmit}>
-                        <div className="form margin-bottom">
-                            <label htmlFor="email">Email Address</label>
-                            <input
+                <Card.Body className="p-4">
+                    <Card.Title className="login-title mb-4">Sign In</Card.Title>
+
+                    {error && (
+                        <Alert variant="danger" className="mb-3">
+                            {error}
+                        </Alert>
+                    )}
+
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3" controlId="email">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control
                                 type="email"
-                                id="email"
+                                placeholder="Enter your email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className={error ? 'input-error' : ''}
                             />
-                        </div>
+                        </Form.Group>
 
-                        <div className="form">
-                            <label htmlFor="password">Password</label>
-                            <input
+                        <Form.Group className="mb-4" controlId="password">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
                                 type="password"
-                                id="password"
+                                placeholder="Enter your password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className={error ? 'input-error' : ''}
                             />
-                        </div>
+                        </Form.Group>
 
-                        {error && (
-                            <div className="error-message">Wrong username or password. Please try again</div>
-                        )}
-
-                        <button type="submit" className="submit-button">
-                            Sign In
-                        </button>
-                    </form>
-                </CardBody>
+                        <Button
+                            type="submit"
+                            className="login-button w-100"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <>
+                                    <Spinner
+                                        as="span"
+                                        animation="border"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                        className="me-2"
+                                    />
+                                    Signing in...
+                                </>
+                            ) : (
+                                'Sign In'
+                            )}
+                        </Button>
+                    </Form>
+                </Card.Body>
             </Card>
         </Container>
     );
